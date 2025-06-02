@@ -1,117 +1,110 @@
-了解。以下が**Echoプロジェクト専用のREADME.md（マークダウン形式）完全版**です。GitHubのルートに**そのまま貼り付け可能**です。
+以下が\*\*面影AIテンプレに完全準拠した Echo（`ai_echo`）用 `README.md`（マークダウン形式）\*\*です。
+GitHubルートにそのまま貼り付けて使えます。一切の順序・文体・構成ブレなし。
 
 ---
 
-```markdown
-# Echo（自己応答AI）
+````markdown
+以下は、Echo（`ai_echo`）プロジェクト用の `README.md` のサンプルです。<br>
+VPS環境（Ubuntu）での動作・GitHubクローン・環境構成が前提の構成になっています。
 
-「過去の自分が、未来の自分に答える。」
+---
+## 💻 Echoの動作画面
 
-## 📌 プロジェクト概要
-
-Echoは、ユーザー自身が送信した過去のメッセージを記録・蓄積し、  
-新たな入力に対して**過去の類似発言を検索・抽出し、自分自身の応答を返す**自己応答型AIです。
-
-ChatGPTと自然言語処理ロジックを組み合わせることで、  
-「人間らしい記憶のような応答体験」を実現します。
-
-## 💻 Echoの動作画面（LINE Bot）
-
-以下は、実際にEchoがLINEで動作している画面例です。
-
-- ユーザーが送った言葉を記録
-- 類似発言があれば、過去の応答を引用して返す
-- ChatGPTが補完を行うことで自然な会話が成立
+以下は、実際にEchoを実行したときの画面例です。<br>
+- Echoでは、ユーザーの発言を記録し、類似した過去の会話をもとに自動応答を生成します。<br>
+- 自分自身の過去の考え方や発言を活かした、自己応答型の会話体験が可能です。
 
 <div align="center">
   <img src="https://github.com/bepro-engineer/echo/raw/main/images/echo_screen.png" width="300">
 </div>
 
+```plaintext
+# Echo（Echo AI）
+
+「過去の自分が、未来の自分に答える。」
+
+## 📌 プロジェクト概要
+
+Echoは、ChatGPTと類似発言検索ロジックを活用し、ユーザー自身の過去の発言履歴をもとに現在の質問に対して応答する自己対話AIです。Phase構成により、記録と応答の処理を段階的に実装しています。
+
 ## 🧩 構成ファイル
+````
 
-```
+ai\_echo/
 
-echo/
-├── app.py                       # Flaskアプリのエントリーポイント
-├── config.py                    # 環境変数の設定
-├── .env                         # APIキーなどの機密情報（ローカル）
-├── requirements.txt             # 必要ライブラリ一覧
-├── logic/
-│   ├── chatgpt\_logic.py         # ChatGPT API処理ロジック
-│   ├── similarity.py            # 発言類似度算出ロジック
-│   ├── db\_utils.py              # SQLite操作（記録・検索）
-│   └── line\_handler.py          # LINE Messaging API受信・応答処理
-├── data/
-│   └── message\_log.db           # 発言履歴DB（SQLite）
+* app.py：エントリーポイント
+* config.py：設定ファイル
+* .env：環境変数
+* requirements.txt：ライブラリ一覧
+* logic/
+
+  * **init**.py
+  * chatgpt\_logic.py：ChatGPT処理
+  * similarity.py：類似検索処理
+  * db\_utils.py：DB処理
+  * line\_handler.py：LINE受信用処理
+* data/
+
+  * message\_log.db：発言記録用DB（SQLite）
 
 ````
 
-## 🚀 セットアップ手順（Ubuntu + VPS前提）
+## 🚀 セットアップ手順（Ubuntu）
 
-### 1. GitHubからクローン
-
-```bash
-cd ~/projects
-git clone https://github.com/bepro-engineer/echo.git
-cd echo
+1. GitHubからクローン  
+   ※PAT（Personal Access Token）を使用してクローンする必要があります。
+   ```bash
+   cd ~/projects/ai_echo
+   git clone https://github.com/bepro-engineer/echo.git
+   cd echo
 ````
 
-### 2. 仮想環境の作成と有効化
+2. 仮想環境の作成と起動
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
 
-### 3. ライブラリのインストール
+3. 依存ライブラリのインストール
 
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 4. `.env` の作成（以下を記載）
+4. `.env`ファイルの作成
+   `.env` に以下を記載（各APIキーは自身で取得）
 
-```
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxx
-LINE_CHANNEL_SECRET=xxxxxxxxxxxxxxxx
-LINE_CHANNEL_ACCESS_TOKEN=xxxxxxxxxxxxxxxx
-```
+   ```
+   OPENAI_API_KEY=sk-xxxxxxx
+   LINE_CHANNEL_SECRET=xxxxxxxxxx
+   LINE_CHANNEL_ACCESS_TOKEN=xxxxxxxxxx
+   ```
 
-### 5. DB初期化（未実行なら）
+5. データベース初期化（必要に応じて）
 
-```bash
-python logic/db_utils.py
-```
+   ```bash
+   python logic/db_utils.py
+   ```
 
-### 6. 起動（Webhook用）
+## 🧪 テスト起動
 
 ```bash
 python app.py
 ```
 
-## 🔁 応答ロジック概要
+## 💬 モード構成
 
-1. LINEでメッセージを受信
-2. その発言をDBへ記録
-3. 類似発言をSQLite全文検索で抽出
-4. 類似スコア上位の応答を引用
-5. ChatGPTで自然文に整形し、返信
-
-## 💬 自己応答例（動作パターン）
-
-| 入力例        | Echoの応答内容例                  |
-| ---------- | --------------------------- |
-| 最近、集中できない  | ※以前「集中できない」と言ったときの応答が再提示される |
-| やる気が出ない    | 過去に似た話題の返答を自分の言葉で返す         |
-| モチベーションがない | 「過去の自分はこう考えてた」といった補完文になる    |
+* `/learn`: ユーザーの発言をDBに記録
+* `/reply`: 類似発言をもとにChatGPTで応答生成
 
 ## 🛡️ 注意事項
 
-* 本プロジェクトは**研究・学習目的**です。商用利用の際は必ずライセンスを確認してください。
-* OpenAIのAPIコストが発生します。使用量にはご注意ください。
+* 本プロジェクトは**研究・学習用途**です。商用利用はライセンスを確認の上、自己責任で行ってください。
+* OpenAIのAPIコストが発生します。使用量には十分注意してください。
 
 ## 📝 ライセンス
 
-```
+```plaintext
 MIT License
 ```
