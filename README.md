@@ -1,9 +1,10 @@
-以下が\*\*面影AIテンプレに完全準拠した Echo（`ai_echo`）用 `README.md`（マークダウン形式）\*\*です。
-GitHubルートにそのまま貼り付けて使えます。一切の順序・文体・構成ブレなし。
-
 ---
-以下は、Echo（`ai_echo`）プロジェクト用の `README.md` のサンプルです。<br>
 VPS環境（Ubuntu）での動作・GitHubクローン・環境構成が前提の構成になっています。
+
+📚 詳細な解説はこちら<br><br>
+本プロジェクトの詳しい背景や仕組み、導入手順については、以下のブログ記事で解説しています。<br>
+👉 Echo｜過去の自分が答えるAIを作る方法を完全公開<br>
+詳しい説明は<a href="https://www.pmi-sfbac.org/category/freelance-automation/product/ai-echo-system/" target="_blank">こちらのブログ記事 (Beエンジニア)</a>をご覧ください。
 
 ---
 ## 💻 Echoの動作画面
