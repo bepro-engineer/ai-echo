@@ -40,13 +40,7 @@ ai\_echo/
 
   * **init**.py
   * chatgpt\_logic.py：ChatGPT処理
-  * similarity.py：類似検索処理
   * db\_utils.py：DB処理
-  * line\_handler.py：LINE受信用処理
-* data/
-
-  * message\_log.db：発言記録用DB（SQLite）
-
 ````
 
 ## 🚀 セットアップ手順（Ubuntu）
@@ -55,7 +49,7 @@ ai\_echo/
    ※PAT（Personal Access Token）を使用してクローンする必要があります。
    ```bash
    cd ~/projects/ai_echo
-   git clone https://github.com/bepro-engineer/echo.git
+   git clone https://github.com/bepro-engineer/ai_echo.git
    cd echo
 ````
 
