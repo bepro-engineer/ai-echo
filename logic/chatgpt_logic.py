@@ -312,3 +312,4 @@ def loadSelfMissionDataJson() -> dict:
     except Exception as e:
         print(f"[ERROR] self_mission.json の読み込みに失敗しました: {e}")
         return {}
+    
