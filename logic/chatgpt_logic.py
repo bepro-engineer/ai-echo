@@ -249,21 +249,43 @@ def getChatGptReply(user_message, target_user_id):
     """
     ユーザー発言をもとに、自己ミッションと記憶を活用して応答を生成。
     """
-    # カテゴリ分類
-    category = getCategoryByGpt(user_message)
-    print(f"🔍 判定カテゴリ: {category}")
 
-    # 記憶ログ取得
-    memory_items = getMemoryForReply(category, target_user_id)
+    # ① カテゴリ分類（GPT出力）
+    raw_category = getCategoryByGpt(user_message)
+    print(f"🔍 判定カテゴリ: {raw_category}")
+
+    # ② カテゴリ名マッピング（self_mission.json のキーに合わせる）
+    CATEGORY_MAPPING = {
+        "感情": "心・精神",
+        "健康": "健康",
+        "趣味": "家庭・プライベート",
+        "仕事": "社会・仕事",
+        "お金": "経済・お金",
+        "教養": "教養・知識"
+    }
+
+    mapped_category = CATEGORY_MAPPING.get(raw_category)
+    if not mapped_category:
+        print(f"[ERROR] 未対応カテゴリ: {raw_category}")
+        mapped_category = raw_category  # fallback
+
+    # ③ 記憶ログ取得
+    memory_items = getMemoryForReply(mapped_category, target_user_id)
     memory_ids = [m[0] for m in memory_items]
     memory_texts = [m[1] for m in memory_items]
 
-    # 自己ミッションJSON読み込み
+    # ④ 自己ミッション・ロール取得
     self_mission = loadSelfMissionDataJson()
-
-    # プロンプト生成とChatGPT呼び出し
     role_label = os.getenv("TARGET_ROLE")
-    prompt = buildReplyPrompt(memory_texts, user_message, role_label, self_mission, category)
+
+    # ⑤ プロンプト構築
+    prompt = buildReplyPrompt(memory_texts, user_message, role_label, self_mission, mapped_category)
+
+    print("[PROMPT DEBUG] =====")
+    print(prompt)
+    print("[PROMPT DEBUG] =====")
+
+    # ⑥ ChatGPT呼び出し
     reply_text = callChatGptWithPrompt(prompt)
 
     return {
@@ -276,6 +298,17 @@ def getChatGptReply(user_message, target_user_id):
 def loadSelfMissionDataJson() -> dict:
     file_path = "./self_mission.json"
     if not os.path.exists(file_path):
+        print("[DEBUG] self_mission.json が存在しません")
         return {}
-    with open(file_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            print("[DEBUG] self_mission.json の読み込みに成功しました")
+            return data
+    except json.JSONDecodeError as e:
+        print(f"[ERROR] JSONデコードエラー: {e}")
+        return {}
+    except Exception as e:
+        print(f"[ERROR] self_mission.json の読み込みに失敗しました: {e}")
+        return {}
