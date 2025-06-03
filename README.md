@@ -15,7 +15,7 @@ VPS環境（Ubuntu）での動作・GitHubクローン・環境構成が前提�
 - 自分自身の過去の考え方や発言を活かした、自己応答型の会話体験が可能です。
 
 <div align="center">
-  <img src="https://github.com/bepro-engineer/ai-echo/blob/main/images/echo_screen.png" width="300">
+<img src="https://raw.githubusercontent.com/bepro-engineer/ai-echo/main/images/echo_screen.png" width="300">
 </div>
 
 ```plaintext
