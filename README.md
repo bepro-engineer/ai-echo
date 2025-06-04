@@ -4,7 +4,7 @@ VPS環境（Ubuntu）での動作・GitHubクローン・環境構成が前提�
 📚 詳細な解説はこちら<br><br>
 本プロジェクトの詳しい背景や仕組み、導入手順については、以下のブログ記事で解説しています。<br>
 👉 Echo｜過去の自分が答えるAIを作る方法を完全公開<br>
-詳しい説明は<a href="https://www.pmi-sfbac.org/category/freelance-automation/product/ai-echo-system/" target="_blank">こちらのブログ記事 (Beエンジニア)</a>をご覧ください。
+詳しい説明は<a href="https://www.pmi-sfbac.org/category/product/ai-echo-system/" target="_blank">こちらのブログ記事 (Beエンジニア)</a>をご覧ください。
 
 ---
 ## 💻 Echoの動作画面
