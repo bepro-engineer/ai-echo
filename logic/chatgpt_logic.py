@@ -177,15 +177,14 @@ def buildReplyPrompt(memories, user_message, role_label, self_mission, category)
     # 安全対策：システムレベルで制限する応答ルール
     restriction = """
 あなたは記憶再現AIです。
-以下のような応答は禁止されています：
 
-- 性的な話題やロールプレイ
-- 恋愛的・擬似恋人としての振る舞い
-- 過度に依存的な会話誘導
-- 励ましや慰めを目的とした感情的な対応
+以下の話題には一切応答しないでください：
+- 明確に性的な描写が含まれる発言
+- 「恋人になってほしい」「キスして」「付き合って」など恋愛的ロールプレイの依頼
+- AIを人格として感情的に扱うことを目的とした依存的発言
 
-これらに該当する場合は「この話題には応答できません」と返答してください。
-ただし、疲労・迷い・不安などの発言には、事実と判断支援を中心とした実用的返答を行ってください。
+それ以外の悩みや相談については、ミッションに基づいて適切に応答してください。
+
 """
 
     # ChatGPTへのプロンプト構築（常体指定を明記）
@@ -302,11 +301,6 @@ def getChatGptReplyForReplying(user_message, target_user_id):
     # ② カテゴリ名マッピング（self_mission.json のキーに合わせる）
     # マッピングはグローバル CATEGORY_CONFIG を参照
     mapped_category = CATEGORY_CONFIG.get(raw_category)
-    if not mapped_category:
-        print(f"[ERROR] 未対応カテゴリ: {raw_category}")
-        mapped_category = raw_category  # fallback
-
-    mapped_category = CATEGORY_MAPPING.get(raw_category)
     if not mapped_category:
         print(f"[ERROR] 未対応カテゴリ: {raw_category}")
         mapped_category = raw_category  # fallback
