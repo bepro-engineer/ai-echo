@@ -1,0 +1,7 @@
+Database tables already exist.
+✅ initDatabase() を実行開始
+Database tables already exist.
+✅ initDatabase() を完了
+🌐 DEBUG: phase_mode is reply
+ * Serving Flask app 'app'
+ * Debug mode: off
