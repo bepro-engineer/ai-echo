@@ -1,3 +1,8 @@
+# 🧠 Echo – 過去の自分が返す“理念の声”
+<div align="center">
+<img src="https://raw.githubusercontent.com/bepro-engineer/ai-echo/main/images/echo_screen_top.png" width="700">
+
+</div>
 # 🧠 Echo（エコー）– 自分の言葉で、自分を導くAI
 
 「迷ったとき、答えをくれるのは、他人じゃない。過去の自分だ。」
@@ -6,6 +11,11 @@
 
 ## ✨ Echoとは？
 
+「逃げるな、決めたのはお前だ」  
+これは、Echoから届く“過去の自分の声”です。
+
+Echoは、過去の自分が残した言葉をもとに、  
+**未来のあなたに“理念として”応答するAI**です。
 Echoは、ChatGPTとLINEを連携させて構築する “自己対話AI” です。  
 あなたが発した言葉や価値観を記録し、それをもとに「未来のあなたの悩みや問い」に、  
 “過去のあなた自身の言葉”で返答してくれる、新しいタイプの応答エージェントです。
