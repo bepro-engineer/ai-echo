@@ -11,7 +11,7 @@ import os
 import json
 
 from logic.db_utils import initDatabase, registerMemoryAndDialogue
-from logic.chatgpt_logic import getChatGptReply, getCategoryByGpt
+from logic.chatgpt_logic import getChatGptReplyForLearning, getChatGptReplyForReplying, getCategoryByGpt
 import logging
 logging.getLogger('werkzeug').setLevel(logging.ERROR)
 
@@ -39,8 +39,8 @@ messaging_api = MessagingApi(ApiClient(Configuration(access_token=access_token))
 # DB初期化
 initDatabase()
 
-@app.route("/echo-webhook", methods=["POST"])
-def echo_webhook():
+@app.route("/ai_echo_webhook", methods=["POST"])
+def ai_echo_webhook():
     signature = request.headers["X-Line-Signature"]
     body_text = request.get_data(as_text=True)
     body_json = request.get_json(force=True)
@@ -89,7 +89,7 @@ def handleMessage(event):
                 category = getCategoryByGptWithMission(message, self_mission_data)
 
                 # ③ ChatGPTから応答を得る（記憶はまだ少ないが、空でも動作可能）
-                gpt_result = getChatGptReply(message, memory_target_user_id)
+                gpt_result = getChatGptReplyForLearning(message, category, memory_target_user_id)
                 reply_text = gpt_result["reply_text"]
                 memory_refs = json.dumps(gpt_result["used_memory_ids"])
 
@@ -134,7 +134,7 @@ def handleMessage(event):
 #                return
             try:
                 # ChatGPT応答を生成（指定ユーザー人格で応答）
-                gpt_result = getChatGptReply(message, memory_target_user_id)
+                gpt_result = getChatGptReplyForReplying(message, memory_target_user_id)
                 reply_text = gpt_result["reply_text"]
                 memory_refs = json.dumps(gpt_result["used_memory_ids"])
 
@@ -166,5 +166,8 @@ def handleMessage(event):
         print(f"[{phase_mode.upper()}] Handler Error: {e}")
 
 if __name__ == '__main__':
+    print("✅ initDatabase() を実行開始")
     initDatabase()
-    app.run(debug=False, host='0.0.0.0', port=5000)
+    print("✅ initDatabase() を完了")
+    print(f"🌐 DEBUG: phase_mode is {phase_mode}")
+    app.run(debug=False, host='0.0.0.0', port=5002)
