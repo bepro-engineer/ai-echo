@@ -1,103 +1,119 @@
----
-VPS環境（Ubuntu）での動作・GitHubクローン・環境構成が前提の構成になっています。
+# 🧠 Echo（エコー）– 自分の言葉で、自分を導くAI
 
-📚 詳細な解説はこちら<br><br>
-本プロジェクトの詳しい背景や仕組み、導入手順については、以下のブログ記事で解説しています。<br>
-👉 Echo｜過去の自分が答えるAIを作る方法を完全公開<br>
-詳しい説明は<a href="https://www.pmi-sfbac.org/category/product/ai-echo-system/" target="_blank">こちらのブログ記事 (Beエンジニア)</a>をご覧ください。
+「迷ったとき、答えをくれるのは、他人じゃない。過去の自分だ。」
 
 ---
+
+## ✨ Echoとは？
+
+Echoは、ChatGPTとLINEを連携させて構築する “自己対話AI” です。  
+あなたが発した言葉や価値観を記録し、それをもとに「未来のあなたの悩みや問い」に、  
+**“過去のあなた自身の言葉”**で返答してくれる、新しいタイプの応答エージェントです。
+
+---
+
+## 🚀 なぜEchoは特別なのか？
+
+| 通常のAIチャット | Echo |
+|------------------|------|
+| 一般知識ベースで応答 | **自分の過去の言葉で応答** |
+| 応答は都度リセットされる | **記憶が蓄積・進化する** |
+| 一時的な助言 | **継続的に育つ“人格”として応答** |
+| 他人の知識で寄り添う | **“自分が言っていたこと”で返す** |
+
+---
+
+## 💡 こんな人におすすめ
+
+- **日々の選択に迷いがある人**
+- 自分の価値観を言語化したい人
+- 過去の気づきを活かせずに忘れてしまう人
+- 自分だけの“思考補助AI”を育ててみたい人
+
+---
+
+## 🔁 Echoが動く2つのモード
+
+| モード | 内容 |
+|--------|------|
+| Phase1（学習） | LINEで送信した発言を分類・記録。人格を形成するための“思考のログ”を蓄積します。 |
+| Phase2（応答） | 新たな発言に対して、過去の自分の言葉をもとにChatGPTが“自分として”返答します。 |
+
+---
+
+## 📚 ブログ解説（導入背景・技術・思想）
+
+このプロジェクトの詳しい背景・構造・実装意図については、以下の記事で完全解説しています。
+
+👉 [Echoの作り方｜過去の自分が答えるAIを作る方法を完全公開](https://www.pmi-sfbac.org/category/product/ai-echo-system/)
+
+---
+
 ## 💻 Echoの動作画面
 
-以下は、実際にEchoを実行したときの画面例です。<br>
-- Echoでは、ユーザーの発言を記録し、類似した過去の会話をもとに自動応答を生成します。<br>
-- 自分自身の過去の考え方や発言を活かした、自己応答型の会話体験が可能です。
+以下は、実際にEchoをLINE上で実行した画面イメージです：
+
+- 左：Phase1（記録モード）  
+- 右：Phase2（応答モード）
 
 <div align="center">
-<img src="https://raw.githubusercontent.com/bepro-engineer/ai-echo/main/images/echo_screen.png" width="300">
+<img src="https://raw.githubusercontent.com/bepro-engineer/ai-echo/main/images/echo_screen.png" width="600">
 </div>
 
+---
+
+## 📌 プロジェクト構成
+
 ```plaintext
-# Echo（Echo AI）
+ai_echo/
+├── app.py                 # Flaskアプリ本体（LINE受信・処理ルーティング）
+├── .env                   # APIキーなどの環境変数
+├── requirements.txt       # 必要ライブラリ
+├── logic/
+│   ├── chatgpt_logic.py   # ChatGPT呼び出し・プロンプト生成・記憶抽出
+│   ├── db_utils.py        # SQLite操作（記憶・対話ログ保存）
+│   └── __init__.py
+└── images/
+    └── echo_screen.png    # 動作イメージ
 
-「過去の自分が、未来の自分に答える。」
+## 🛠️ セットアップ手順（Ubuntu）
+# 1. GitHubからクローン
+git clone https://github.com/bepro-engineer/ai_echo.git
+cd ai_echo
 
-## 📌 プロジェクト概要
+# 2. 仮想環境の構築と起動
+python3 -m venv .venv
+source .venv/bin/activate
 
-Echoは、ChatGPTと類似発言検索ロジックを活用し、ユーザー自身の過去の発言履歴をもとに現在の質問に対して応答する自己対話AIです。Phase構成により、記録と応答の処理を段階的に実装しています。
+# 3. ライブラリのインストール
+pip install -r requirements.txt
 
-## 🧩 構成ファイル
-````
+# 4. .envファイルの作成
+# 以下の内容を.envファイルに記載（各種キーは自分で取得）
+OPENAI_API_KEY=sk-xxxxxxx
+LINE_CHANNEL_SECRET=xxxxxxxxxx
+LINE_CHANNEL_ACCESS_TOKEN=xxxxxxxxxx
 
-ai\_echo/
+# 5. データベース初期化（必要な場合）
+python logic/db_utils.py
 
-* app.py：エントリーポイント
-* config.py：設定ファイル
-* .env：環境変数
-* requirements.txt：ライブラリ一覧
-* logic/
-
-  * **init**.py
-  * chatgpt\_logic.py：ChatGPT処理
-  * db\_utils.py：DB処理
-````
-
-## 🚀 セットアップ手順（Ubuntu）
-
-1. GitHubからクローン  
-   ※PAT（Personal Access Token）を使用してクローンする必要があります。
-   ```bash
-   cd ~/projects/ai_echo
-   git clone https://github.com/bepro-engineer/ai_echo.git
-   cd echo
-````
-
-2. 仮想環境の作成と起動
-
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate
-   ```
-
-3. 依存ライブラリのインストール
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. `.env`ファイルの作成
-   `.env` に以下を記載（各APIキーは自身で取得）
-
-   ```
-   OPENAI_API_KEY=sk-xxxxxxx
-   LINE_CHANNEL_SECRET=xxxxxxxxxx
-   LINE_CHANNEL_ACCESS_TOKEN=xxxxxxxxxx
-   ```
-
-5. データベース初期化（必要に応じて）
-
-   ```bash
-   python logic/db_utils.py
-   ```
-
-## 🧪 テスト起動
-
-```bash
+# 6. テスト起動
 python app.py
-```
 
-## 💬 モード構成
+## 💬 利用モードについて
+PHASE_MODE=learn → Phase1（記録モード）
 
-* `/learn`: ユーザーの発言をDBに記録
-* `/reply`: 類似発言をもとにChatGPTで応答生成
+PHASE_MODE=reply → Phase2（応答モード）
+
+.env 内で環境変数 PHASE_MODE を切り替えて使用してください。
 
 ## 🛡️ 注意事項
+本プロジェクトは自己実験・学習目的で設計されています。
 
-* 本プロジェクトは**研究・学習用途**です。商用利用はライセンスを確認の上、自己責任で行ってください。
-* OpenAIのAPIコストが発生します。使用量には十分注意してください。
+OpenAI APIの利用料金が発生するため、月額上限に注意してください。
 
-## 📝 ライセンス
+記録されたデータにはプライバシー上の配慮が必要です。商用運用時はご注意ください。
 
-```plaintext
+## 📜 ライセンス
 MIT License
-```
+---
