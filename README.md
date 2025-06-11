@@ -3,6 +3,7 @@
 <img src="https://raw.githubusercontent.com/bepro-engineer/ai-echo/main/images/echo_screen_top.png" width="700">
 
 </div>
+
 ## 🧠 Echo（エコー）– 自分の言葉で、自分を導くAI
 
 「迷ったとき、答えをくれるのは、他人じゃない。過去の自分だ。」
